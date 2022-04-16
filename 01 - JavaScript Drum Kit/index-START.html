@@ -58,6 +58,36 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+/**
+ * 1. When to use window? When to use document?
+ * 2. Is noun+state (e.g. keydown, transitionend) the general event-naming rule?
+ * 3. Ctrl + Shift + P = view parameter hints.
+ * */
+
+  // Listen for the key press.
+  window.addEventListener("keydown", function(e) {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    if (!audio) {
+      return; // Ignore.
+    }
+
+    audio.currentTime = 0; // Reset audio to the start.
+    audio.play();
+
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    key.classList.add("playing");
+  });
+
+  keys = document.querySelectorAll(".key");
+  for (const key of keys) {
+    key.addEventListener("transitionend", function(e) {
+      if (e.propertyName !== "transform") {
+        return; // Ignore.
+      }
+
+      key.classList.remove("playing");
+    });
+  }
 
 </script>
 
